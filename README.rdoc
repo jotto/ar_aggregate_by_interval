@@ -1,0 +1,5 @@
+= ArAggregateCounter
+
+    Blog.count_weekly(date_group_col = :created_at, aggregate_col = nil, from = 6.months.ago, to = nil)
+  Blog Load (40.0ms)  SELECT count(*) as totalchunked__, to_char(created_at, 'IYYY-IW') as datechunk__ FROM "blogs" WHERE (created_at >= '2012-12-24' and created_at <= '2013-07-01') GROUP BY datechunk__
+=> [98, 129, 135, 132, 121, 92, 83, 81, 65, 77, 108, 105, 94, 94, 101, 123, 83, 93, 97, 107, 92, 122, 94, 152, 115, 117, 96, 0]
