@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Jonathan Otto"]
   s.email       = ["jonathan.otto@gmail.com"]
   s.homepage    = ""
-  s.summary     = "adds [sum|cout]_[daily|weekly|monthly] to your AR models for MySQL AND Postgres"
-  s.description = "adds [sum|cout]_[daily|weekly|monthly] to your AR models for MySQL AND Postgres"
+  s.summary     = "adds [sum|count]_[daily|weekly|monthly] to your AR models for MySQL AND Postgres"
+  s.description = "adds [sum|count]_[daily|weekly|monthly] to your AR models for MySQL AND Postgres"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
