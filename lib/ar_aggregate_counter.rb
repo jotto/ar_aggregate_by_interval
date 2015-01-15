@@ -4,15 +4,17 @@
 # POSTGRES AND MYSQL COMPATIBLE
 module ArAggregateCounter
   extend ActiveSupport::Concern
-  # module ClassMethods
+
     def method_missing(method_name, *args)
       tokenized_method = method_name.to_s.scan(/\A(sum|count)_(daily|weekly|monthly)\z/).flatten
       return super unless tokenized_method.size == 2 && tokenized_method.all?{|chunk|chunk.present?}
       aggregate_counter(*[*tokenized_method, *args])
     end
-    def aggregate_counter(sum_or_count, daily_weekly_monthly, date_group_col = :created_at, aggregate_col = nil, from = nil, to = nil)
+
+    def aggregate_counter(sum_or_count, daily_weekly_monthly, date_group_col = :created_at, aggregate_col = nil, from = nil, to = nil, return_dates = false)
       if sum_or_count == "count"
         if aggregate_col.present? && (aggregate_col.is_a?(Date) || aggregate_col.is_a?(Time))
+          return_dates = to
           to = from
           from = aggregate_col
           aggregate_col = nil
@@ -71,18 +73,19 @@ module ArAggregateCounter
         where(["#{date_group_col} >= ? and #{date_group_col} <= ?", from, to])
 
       res_hash = _scope.inject({}){ |memo, ar_obj| memo.merge(ar_obj.datechunk__.to_s => ar_obj.totalchunked__) }
-      array_of_numbers = from.to_date.send(date_iterator[daily_weekly_monthly]).collect do |month_date_object|
-        _rb_datechunk = month_date_object.strftime(rubystrftime[daily_weekly_monthly])
-        res_hash[_rb_datechunk.to_s] || 0
+
+      from.to_date.send(date_iterator[daily_weekly_monthly]).collect do |date|
+
+        _rb_datechunk = date.strftime(rubystrftime[daily_weekly_monthly])
+        val = res_hash[_rb_datechunk.to_s] || 0
+        val = val.to_i if sum_or_count == 'count'
+
+        return_dates ? { :date => date, :value => val } : val
+
       end
-
-      array_of_numbers.collect!(&:to_i) if sum_or_count == "count"
-
-      array_of_numbers
     end
-  # end
+
 end
 
-# ActiveRecord::Base.send(:include, ArAggregateCounter)
 ActiveRecord::Base.send :extend, ArAggregateCounter
 ActiveRecord::Relation.send :include, ArAggregateCounter
