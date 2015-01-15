@@ -70,10 +70,10 @@ module ArAggregateCounter
         group("datechunk__").
         where(["#{date_group_col} >= ? and #{date_group_col} <= ?", from, to])
 
-      res = _scope.to_a
+      res_hash = _scope.inject({}){ |memo, ar_obj| memo.merge(ar_obj.datechunk__.to_s => ar_obj.totalchunked__) }
       array_of_numbers = from.to_date.send(date_iterator[daily_weekly_monthly]).collect do |month_date_object|
         _rb_datechunk = month_date_object.strftime(rubystrftime[daily_weekly_monthly])
-        res.find{|row|row.datechunk__.to_s == _rb_datechunk.to_s}.try(:totalchunked__) || 0
+        res_hash[_rb_datechunk.to_s] || 0
       end
 
       array_of_numbers.collect!(&:to_i) if sum_or_count == "count"
