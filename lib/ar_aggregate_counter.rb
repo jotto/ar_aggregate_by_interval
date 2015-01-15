@@ -64,10 +64,11 @@ module ArAggregateCounter
       from = from.to_date
       to = to.to_date
 
-      _scope = self.scoped.select("#{sum_or_count}(#{aggregate_col || '*'}) as totalchunked__").
-      select("#{date_format[daily_weekly_monthly]} as datechunk__").
-      group("datechunk__").
-      where(["#{date_group_col} >= ? and #{date_group_col} <= ?",from,to])
+      _scope = self.
+        select("#{sum_or_count}(#{aggregate_col || '*'}) as totalchunked__").
+        select("#{date_format[daily_weekly_monthly]} as datechunk__").
+        group("datechunk__").
+        where(["#{date_group_col} >= ? and #{date_group_col} <= ?", from, to])
 
       res = _scope.to_a
       array_of_numbers = from.to_date.send(date_iterator[daily_weekly_monthly]).collect do |month_date_object|
