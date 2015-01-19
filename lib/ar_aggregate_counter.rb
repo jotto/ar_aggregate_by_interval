@@ -74,7 +74,7 @@ module ArAggregateCounter
 
       res_hash = _scope.inject({}){ |memo, ar_obj| memo.merge(ar_obj.datechunk__.to_s => ar_obj.totalchunked__) }
 
-      from.to_date.send(date_iterator[daily_weekly_monthly]).collect do |date|
+      from.to_date.send(date_iterator[daily_weekly_monthly], to).collect do |date|
 
         _rb_datechunk = date.strftime(rubystrftime[daily_weekly_monthly])
         val = res_hash[_rb_datechunk.to_s] || 0
