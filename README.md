@@ -1,7 +1,7 @@
 # ArAggregateByInterval
 ---
 Build arrays of counts and sums from Ruby on Rails ActiveRecord models grouped by days, weeks or months. e.g.:
-```
+```ruby
 # default 'group by' is 'created_at'
 Blog.count_weekly(1.month.ago).values
 => [4, 2, 2, 0]
