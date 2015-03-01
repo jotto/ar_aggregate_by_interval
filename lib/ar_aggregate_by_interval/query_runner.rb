@@ -16,7 +16,7 @@ module ArAggregateByInterval
       from: [Date, DateTime, Time, ActiveSupport::TimeWithZone],
       to: [:optional, Date, DateTime, Time, ActiveSupport::TimeWithZone],
 
-      aggregate_column: [:optional, String] # required when using sum (as opposed to count)
+      aggregate_column: [:optional, String, NilClass] # required when using sum (as opposed to count)
     }
 
     attr_reader :values, :values_and_dates

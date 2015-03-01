@@ -8,7 +8,7 @@ require 'ar_aggregate_by_interval/utils'
 module ArAggregateByInterval
 
   def method_missing(method_name, *args)
-    supported_methods_rgx = /\A(sum|count)_(daily|weekly|monthly)\z/
+    supported_methods_rgx = /\A(count|sum|avg)_(daily|weekly|monthly)\z/
 
     aggregate_function, interval = method_name.to_s.scan(supported_methods_rgx).flatten
 

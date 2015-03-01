@@ -25,6 +25,12 @@ describe ArAggregateByInterval do
     end
   end
 
+  shared_examples_for 'avg .values_and_dates' do
+    it 'returns value and date with expected values' do
+      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 10])
+    end
+  end
+
   context 'scoped' do
     subject do
       Blog.where('id > 0').count_weekly('created_at', @from, @from)
@@ -57,6 +63,18 @@ describe ArAggregateByInterval do
       it_behaves_like 'sum .values_and_dates'
     end
 
+    context 'for avg' do
+      subject do
+        Blog.avg_weekly({
+          group_by_column: 'created_at',
+          aggregate_column: 'arbitrary_number',
+          from: @from,
+          to: @to
+        })
+      end
+      it_behaves_like 'avg .values_and_dates'
+    end
+
   end
 
   context 'normal args' do
@@ -71,6 +89,12 @@ describe ArAggregateByInterval do
         Blog.sum_weekly('created_at', 'arbitrary_number', @from, @from)
       end
       it_behaves_like 'sum .values_and_dates'
+    end
+    context 'for avg' do
+      subject do
+        Blog.avg_weekly('created_at', 'arbitrary_number', @from, @from)
+      end
+      it_behaves_like 'avg .values_and_dates'
     end
   end
 
