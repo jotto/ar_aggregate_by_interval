@@ -25,6 +25,13 @@ describe ArAggregateByInterval do
     end
   end
 
+  context 'scoped' do
+    subject do
+      Blog.where('id > 0').count_weekly('created_at', @from, @from)
+    end
+    it_behaves_like 'count .values_and_dates'
+  end
+
   context 'hash args' do
 
     context 'for count' do

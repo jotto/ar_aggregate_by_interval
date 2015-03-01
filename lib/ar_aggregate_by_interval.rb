@@ -33,4 +33,7 @@ module ArAggregateByInterval
 
 end
 
+# for queries on the class
 ActiveRecord::Base.send :extend, ArAggregateByInterval
+# for scoped queries
+ActiveRecord::Relation.send :include, ArAggregateByInterval
