@@ -94,7 +94,7 @@ module ArAggregateByInterval
       time_interval = {
         'monthly' => 'month',
         'weekly' => 'week',
-        'daily' => 'daily'
+        'daily' => 'day'
       }[interval] || raise("unknown interval #{interval}")
 
       "#{beg_or_end}_of_#{time_interval}"
