@@ -11,6 +11,7 @@ ActiveRecord::Schema.define do
   create_table :page_views, force: true do |t|
     t.references :blog
     t.datetime :date
+    t.integer :count
   end
 
 end
