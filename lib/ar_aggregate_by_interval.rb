@@ -24,6 +24,11 @@ module ArAggregateByInterval
 
     return super unless hash_args
 
+    # convert strings to symbols
+    [:group_by_column, :aggregate_column].each do |col|
+      hash_args[col] = hash_args[col].intern if hash_args[col]
+    end
+
     QueryRunner.new(self, {
       aggregate_function: aggregate_function,
       interval: interval

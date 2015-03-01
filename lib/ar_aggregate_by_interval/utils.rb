@@ -33,10 +33,10 @@ module ArAggregateByInterval
       end
 
       return {
-        group_by_column: group_by_column,
+        group_by_column: group_by_column.try(:intern),
         from: from,
         to: to,
-        aggregate_column: aggregate_column
+        aggregate_column: aggregate_column.try(:intern)
       }.delete_if { |k, v| v.nil? }
     end
 

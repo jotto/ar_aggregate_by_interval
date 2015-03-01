@@ -30,7 +30,7 @@ describe ArAggregateByInterval do
   context 'ActiveRecord::Relation scoped' do
     subject do
       # `where` returns ActiveRecord::Relation
-      Blog.where('id > 0').count_weekly('created_at', @from, @from)
+      Blog.where('id > 0').count_weekly(:created_at, @from, @from)
     end
     it_behaves_like 'count .values_and_dates'
   end
@@ -38,7 +38,7 @@ describe ArAggregateByInterval do
   context 'Array scoped' do
     subject do
       # `associations` return arrays
-      Blog.first.page_views.count_weekly('date', @from, @from)
+      Blog.first.page_views.count_weekly(:date, @from, @from)
     end
     it_behaves_like 'count .values_and_dates'
   end
@@ -48,7 +48,7 @@ describe ArAggregateByInterval do
     context 'for count' do
       subject do
         Blog.count_weekly({
-          group_by_column: 'created_at',
+          group_by_column: :created_at,
           from: @from,
           to: @to
         })
@@ -59,20 +59,32 @@ describe ArAggregateByInterval do
     context 'for sum' do
       subject do
         Blog.sum_weekly({
-          group_by_column: 'created_at',
-          aggregate_column: 'arbitrary_number',
+          group_by_column: :created_at,
+          aggregate_column: :arbitrary_number,
           from: @from,
           to: @to
         })
       end
       it_behaves_like 'sum .values_and_dates'
+
+      context 'with strings' do
+        subject do
+          Blog.sum_weekly({
+            group_by_column: 'created_at',
+            aggregate_column: 'arbitrary_number',
+            from: @from,
+            to: @to
+          })
+        end
+        it_behaves_like 'sum .values_and_dates'
+      end
     end
 
     context 'for avg' do
       subject do
         Blog.avg_weekly({
-          group_by_column: 'created_at',
-          aggregate_column: 'arbitrary_number',
+          group_by_column: :created_at,
+          aggregate_column: :arbitrary_number,
           from: @from,
           to: @to
         })
@@ -85,19 +97,26 @@ describe ArAggregateByInterval do
   context 'normal args' do
     context 'for count' do
       subject do
-        Blog.count_weekly('created_at', @from, @from)
+        Blog.count_weekly(:created_at, @from, @from)
       end
       it_behaves_like 'count .values_and_dates'
     end
     context 'for sum' do
       subject do
-        Blog.sum_weekly('created_at', 'arbitrary_number', @from, @from)
+        Blog.sum_weekly(:created_at, :arbitrary_number, @from, @from)
       end
       it_behaves_like 'sum .values_and_dates'
+
+      context 'with strings' do
+        subject do
+          Blog.sum_weekly('created_at', 'arbitrary_number', @from, @from)
+        end
+        it_behaves_like 'sum .values_and_dates'
+      end
     end
     context 'for avg' do
       subject do
-        Blog.avg_weekly('created_at', 'arbitrary_number', @from, @from)
+        Blog.avg_weekly(:created_at, :arbitrary_number, @from, @from)
       end
       it_behaves_like 'avg .values_and_dates'
     end
@@ -106,7 +125,7 @@ describe ArAggregateByInterval do
   context 'bad args' do
     context 'for count' do
       subject do
-        Blog.count_weekly('created_at', {}, {})
+        Blog.count_weekly(:created_at, {}, {})
       end
       it 'raise NoMethodError' do
         expect do
@@ -117,7 +136,7 @@ describe ArAggregateByInterval do
 
     context 'for sum' do
       subject do
-        Blog.sum_weekly('created_at', @from, @from)
+        Blog.sum_weekly(:created_at, @from, @from)
       end
       it 'raise NoMethodError' do
         expect do

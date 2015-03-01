@@ -11,12 +11,12 @@ module ArAggregateByInterval
     VALID_HASH_ARGS = {
       aggregate_function: [String], # sum, count
       interval: [String], # daily, weekly, monthly
-      group_by_column: [String], # i.e.: created_at
+      group_by_column: [Symbol], # i.e.: :created_at
 
       from: [Date, DateTime, Time, ActiveSupport::TimeWithZone],
       to: [:optional, Date, DateTime, Time, ActiveSupport::TimeWithZone],
 
-      aggregate_column: [:optional, String, NilClass] # required when using sum (as opposed to count)
+      aggregate_column: [:optional, Symbol, NilClass] # required when using sum (as opposed to count)
     }
 
     attr_reader :values, :values_and_dates

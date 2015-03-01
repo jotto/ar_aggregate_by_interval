@@ -8,7 +8,7 @@ module ArAggregateByInterval
         aggregate_function: aggregate_function,
         aggregate_column: (aggregate_column rescue nil),
         interval: interval,
-        group_by_column: 'created_at',
+        group_by_column: :created_at,
         from: from,
         to: to
       })
@@ -31,7 +31,7 @@ module ArAggregateByInterval
       context 'avg daily' do
         let(:interval) { 'daily' }
         let(:aggregate_function) { 'avg' }
-        let(:aggregate_column) { 'arbitrary_number' }
+        let(:aggregate_column) { :arbitrary_number }
 
         describe '.values' do
           it 'returns an array of size 7' do
