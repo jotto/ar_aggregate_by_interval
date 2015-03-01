@@ -25,6 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '~> 4.0'
   s.add_dependency 'activerecord', '~> 4.0'
   s.add_dependency 'classy_hash', '~> 0.1'
-  s.add_dependency 'date_iterator'
+  s.add_dependency 'date_iterator', '~> 1.0'
 
 end
