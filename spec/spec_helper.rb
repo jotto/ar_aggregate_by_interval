@@ -101,3 +101,5 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+require 'ar_bootstrap/init'

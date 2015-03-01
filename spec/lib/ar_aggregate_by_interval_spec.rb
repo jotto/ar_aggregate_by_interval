@@ -1,9 +1,4 @@
-require 'active_record'
 require 'ar_aggregate_by_interval'
-ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
-load File.join(File.dirname(__FILE__), '../schema.rb')
-
-class Blog < ActiveRecord::Base; end
 
 describe ArAggregateByInterval do
 
