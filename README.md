@@ -1,5 +1,8 @@
 # ArAggregateByInterval
 ---
+
+[![Circle CI](https://circleci.com/gh/jotto/ar_aggregate_by_interval.svg?style=svg)](https://circleci.com/gh/jotto/ar_aggregate_by_interval)
+
 Build arrays of counts, sums and averages from Ruby on Rails ActiveRecord models grouped by days, weeks or months. e.g.:
 ```ruby
 # default 'group by' is 'created_at'

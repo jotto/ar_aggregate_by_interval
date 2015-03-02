@@ -1,0 +1,7 @@
+database:
+  override:
+    - ls # no op
+
+test:
+  override:
+    - bundle exec rake
