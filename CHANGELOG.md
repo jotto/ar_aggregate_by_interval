@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file adheres to [Keep a changelog](http://keepachangelog.com/).
 
+## [1.1.3] - 2015-03-02
+### Fixed
+- Fix Postgres queries due to AR injecting order clause
+- Fix `daily` methods due to AR interpretting dates as Ruby date objects
+- Allow running from IRB
+
 ## [1.1.2] - 2015-03-01
 ### Fixed
 - Allow symbols to fix incorrect enforcement of strings for SQL columnn names
