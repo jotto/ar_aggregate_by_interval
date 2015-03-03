@@ -35,7 +35,8 @@ module ArAggregateByInterval
         select("#{hash_args[:aggregate_function]}(#{hash_args[:aggregate_column] || '*'}) as totalchunked__").
         select("#{db_vendor_select_for_date_function} as datechunk__").
         group('datechunk__').
-        where(["#{hash_args[:group_by_column]} >= ? and #{hash_args[:group_by_column]} <= ?", from, to])
+        where(["#{hash_args[:group_by_column]} >= ? and #{hash_args[:group_by_column]} <= ?", from, to]).
+        order(nil)
 
       # fill the gaps of the sql results
       agg_int = QueryResult.new({
