@@ -42,7 +42,7 @@ module ArAggregateByInterval
 
     def ar_to_hash(ar_result, mapping)
       ar_result.to_a.inject({}) do |memo, ar_obj|
-        mapping.each { |key, val| memo.merge!(ar_obj.send(key) => ar_obj.send(val)) }
+        mapping.each { |key, val| memo.merge!(ar_obj.send(key).to_s => ar_obj.send(val)) }
         memo
       end
     end
