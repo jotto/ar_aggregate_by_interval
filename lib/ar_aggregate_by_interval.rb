@@ -1,3 +1,4 @@
+require 'active_record'
 require 'ar_aggregate_by_interval/query_runner'
 require 'ar_aggregate_by_interval/utils'
 
