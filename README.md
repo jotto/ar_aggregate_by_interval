@@ -1,13 +1,23 @@
-# ArAggregateByInterval
+# ArAggregateByInterval (Time series)
 ---
 
 [![Circle CI](https://circleci.com/gh/jotto/ar_aggregate_by_interval.svg?style=svg)](https://circleci.com/gh/jotto/ar_aggregate_by_interval)
 
+For MySQL or Postgres.
+
 Build arrays of counts, sums and averages from Ruby on Rails ActiveRecord models grouped by days, weeks or months. e.g.:
 ```ruby
-# default 'group by' is 'created_at'
-Blog.count_weekly(1.month.ago).values
+# (group_by_col, from, to = Time.now)
+Blog.count_weekly(:created_at, 1.month.ago).values
 => [4, 2, 2, 0]
+
+# (group_by_col, aggregate_col, from, to = Time.now)
+Blog.sum_weekly(:created_at, :pageviews, 1.month.ago).values
+=> [400, 350, 375, 250]
+
+# (group_by_col, aggregate_col, from, to = Time.now)
+Blog.avg_weekly(:created_at, :pageviews, 1.month.ago).values
+=> [25, 20, 40, 10]
 ```
 
 ## Why?
@@ -16,7 +26,13 @@ Blog.count_weekly(1.month.ago).values
 
 ## Usage
 ```ruby
-ActiveRecordModel.{sum,count,avg}_{daily,weekly,monthly}(arg_hash).{values,values_and_dates}
+# be explicit and pass a hash
+# [:group_by_column, :from, :to, :aggregate_column]
+
+# or just pass arguments
+# count: arg_hash can be arguments: (group_by_col, from, to)
+# sum and avg: arg_hash can be arguments: (group_by_col, aggregate_col, from, to)
+Blog.{count,sum,avg}_{daily,weekly,monthly}(arg_hash).{values,values_and_dates}
 ```
 
 ```ruby
