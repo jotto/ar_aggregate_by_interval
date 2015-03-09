@@ -23,7 +23,7 @@ module ArAggregateByInterval
       nil
     end
 
-    return super unless hash_args
+    raise ArgumentError, 'incorrect ArAggregateByInterval arguments' unless hash_args
 
     # convert strings to symbols
     [:group_by_column, :aggregate_column].each do |col|

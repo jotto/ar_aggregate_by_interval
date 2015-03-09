@@ -29,7 +29,7 @@ module ArAggregateByInterval
           aggregate_column = nil
         end
       elsif sum_or_count != 'count' && aggregate_column.nil? || !(aggregate_column.is_a?(String) || aggregate_column.is_a?(Symbol))
-        raise "aggregate_column cant be nil with #{sum_or_count}"
+        raise ArgumentError, "aggregate_column cant be nil with #{sum_or_count}"
       end
 
       return {

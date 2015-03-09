@@ -129,10 +129,10 @@ describe ArAggregateByInterval do
       subject do
         Blog.count_weekly(:created_at, {}, {})
       end
-      it 'raise NoMethodError' do
+      it 'raise ArgumentError' do
         expect do
           subject
-        end.to raise_error(NoMethodError)
+        end.to raise_error(ArgumentError)
       end
     end
 
@@ -140,10 +140,10 @@ describe ArAggregateByInterval do
       subject do
         Blog.sum_weekly(:created_at, @from, @from)
       end
-      it 'raise NoMethodError' do
+      it 'raise ArgumentError' do
         expect do
           subject
-        end.to raise_error(RuntimeError, /aggregate_column/)
+        end.to raise_error(ArgumentError, /aggregate_column/)
       end
     end
   end

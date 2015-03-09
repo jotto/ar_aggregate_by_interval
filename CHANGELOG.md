@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file adheres to [Keep a changelog](http://keepachangelog.com/).
 
+## [1.1.5] - 2015-03-08 (maintenance)
+### Changed
+- Raise ArgumentError instead of NoMethodError or RuntimeError on bad args
+
 ## [1.1.4] - 2015-03-08 (maintenance)
 ### Changed
 - Moved functionality from constructors to methods
