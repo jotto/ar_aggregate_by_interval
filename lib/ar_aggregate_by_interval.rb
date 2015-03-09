@@ -30,10 +30,23 @@ module ArAggregateByInterval
       hash_args[col] = hash_args[col].intern if hash_args[col]
     end
 
-    QueryRunner.new(self, {
+    # build query object
+    query_runner = QueryRunner.new(self, {
       aggregate_function: aggregate_function,
       interval: interval
     }.merge(hash_args))
+
+    # actually run SQL and return a hash of dates => vals
+    date_values_hash = query_runner.run_query
+
+    # takes hash and fills in missing dates
+    # this QueryResult object has 2 attributes: values_and_dates, values
+    QueryResult.new({
+      date_values_hash: date_values_hash,
+      from: query_runner.from,
+      to: query_runner.to,
+      interval: query_runner.interval
+    })
 
   end
 

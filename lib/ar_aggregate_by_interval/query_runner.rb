@@ -19,40 +19,57 @@ module ArAggregateByInterval
       aggregate_column: [:optional, Symbol, NilClass] # required when using sum (as opposed to count)
     }
 
-    attr_reader :values, :values_and_dates
+    attr_reader :values, :values_and_dates, :from, :to, :interval
 
     def initialize(ar_model, hash_args)
 
       validate_args!(hash_args)
 
-      from = normalize_from(hash_args[:from], hash_args[:interval])
-      to = normalize_to(hash_args[:to] || Time.zone.try(:now) || Time.now, hash_args[:interval])
+      @ar_model = ar_model
 
-      db_vendor_select_for_date_function =
+      @from = normalize_from(hash_args[:from], hash_args[:interval])
+      @to = normalize_to(hash_args[:to] || Time.zone.try(:now) || Time.now, hash_args[:interval])
+
+      @db_vendor_select =
         Utils.select_for_grouping_column(hash_args[:group_by_column])[hash_args[:interval]]
 
-      ar_result = ar_model.
-        select("#{hash_args[:aggregate_function]}(#{hash_args[:aggregate_column] || '*'}) as totalchunked__").
-        select("#{db_vendor_select_for_date_function} as datechunk__").
-        group('datechunk__').
-        where(["#{hash_args[:group_by_column]} >= ? and #{hash_args[:group_by_column]} <= ?", from, to]).
-        order(nil)
+      @aggregate_function = hash_args[:aggregate_function]
+      @aggregate_column = hash_args[:aggregate_column]
+      @group_by_column = hash_args[:group_by_column]
 
-      # fill the gaps of the sql results
-      agg_int = QueryResult.new({
-        ar_result: ar_result,
-        ar_result_select_col_mapping: {'datechunk__' => 'totalchunked__'},
-        from: from,
-        to: to,
-        interval: hash_args[:interval]
-      })
+      @interval = hash_args[:interval]
+    end
 
-      @values_and_dates = agg_int.values_and_dates
-      @values = @values_and_dates.collect { |hash| hash[:value] }
+    def run_query
+      # actually run query
+      array_of_pairs = ActiveRecord::Base.connection.select_rows(to_sql)
 
+      # workaround ActiveRecord's automatic casting to Date objects
+      # (ideally we could return raw values straight from ActiveRecord to avoid this expensive N)
+      array_of_pairs.collect! do |date_val_pair|
+        date_val_pair.collect(&:to_s)
+      end
+
+      # convert the array of key/values to a hash
+      Hash[array_of_pairs]
     end
 
     private
+
+    def to_sql
+      # first col is date, second col is actual value
+      query = @ar_model.
+        select("#{@db_vendor_select} as datechunk__").
+        select("#{@aggregate_function}(#{@aggregate_column || '*'}) as totalchunked__").
+        where(["#{@group_by_column} >= ? and #{@group_by_column} <= ?", @from, @to]).
+        group('datechunk__')
+
+      # workaround Postgres adapter's insistence of adding an order clause
+      query = query.order(nil)
+
+      # an string of the query to run
+      query.to_sql
+    end
 
     def validate_args!(hash_args)
       ClassyHash.validate(hash_args, VALID_HASH_ARGS)

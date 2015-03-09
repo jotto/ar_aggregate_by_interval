@@ -5,25 +5,27 @@ describe ArAggregateByInterval do
   before(:all) do |example|
     @from = DateTime.parse '2013-08-05'
     @to = @from
-    blog = Blog.create arbitrary_number: 10, created_at: @from
-    blog.page_views.create date: @from
+    blog1 = Blog.create arbitrary_number: 10, created_at: @from
+    blog2 = Blog.create arbitrary_number: 20, created_at: @from
+    blog1.page_views.create date: @from
+    blog1.page_views.create date: @from
   end
 
   shared_examples_for 'count .values_and_dates' do
     it 'returns value and date with expected values' do
-      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 1])
+      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 2])
     end
   end
 
   shared_examples_for 'sum .values_and_dates' do
     it 'returns value and date with expected values' do
-      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 10])
+      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 30])
     end
   end
 
   shared_examples_for 'avg .values_and_dates' do
     it 'returns value and date with expected values' do
-      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 10])
+      expect(subject.values_and_dates).to eq([date: @from.beginning_of_week.to_date, value: 15])
     end
   end
 

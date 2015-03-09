@@ -5,47 +5,41 @@ module ArAggregateByInterval
 
   describe Utils do
 
-    context 'converting ar to hash' do
+    describe 'interval_inflector' do
 
-      subject do
-        described_class.ar_to_hash(ar_objs, mapping)
-      end
-
-      context 'normal values' do
-        let(:ar_objs) do
-          [
-            OpenStruct.new({
-              date_chunk__: '2014-01-01',
-              value: 5
-            })
-          ]
-        end
-
-        let(:mapping) { { 'date_chunk__' => 'value' } }
-
-        it 'works' do
-          expect(subject).to eq({ '2014-01-01' => 5 })
+      shared_examples 'working inflector' do |int, beg_end, expected|
+        it "works for #{beg_end}_#{int}" do
+          expect(described_class.interval_inflector(int, beg_end)).to eq expected
         end
       end
 
-      context 'arbitrary values' do
-        let(:ar_objs) do
-          [
-            OpenStruct.new({
-              id: OpenStruct.new({}),
-              something: 1
-            })
-          ]
-        end
-        let(:mapping) { { 'id' => 'something' } }
+      include_examples 'working inflector', 'daily', 'beginning', 'beginning_of_day'
+      include_examples 'working inflector', 'daily', 'end', 'end_of_day'
 
-        it 'does not cast or change any objects' do
-          expect(subject.keys.first).to be_a(OpenStruct)
-          expect(subject.values.first).to be_a(Integer)
-        end
-      end
+      include_examples 'working inflector', 'weekly', 'beginning', 'beginning_of_week'
+      include_examples 'working inflector', 'weekly', 'end', 'end_of_week'
+
+      include_examples 'working inflector', 'monthly', 'beginning', 'beginning_of_month'
+      include_examples 'working inflector', 'monthly', 'end', 'end_of_month'
 
     end
+
+    describe 'to_f_or_i_or_s' do
+
+      shared_examples 'working Numeric converter' do |arg1, expected_class|
+        it "works for #{arg1.class.name} to #{expected_class.name}" do
+          expect(described_class.to_f_or_i_or_s(arg1)).to be_instance_of(expected_class)
+        end
+      end
+
+      include_examples 'working Numeric converter', '1.1', Float
+      include_examples 'working Numeric converter', 1.1, Float
+      include_examples 'working Numeric converter', '1.0', Fixnum
+      include_examples 'working Numeric converter', 1.0, Fixnum
+      include_examples 'working Numeric converter', 1, Fixnum
+
+    end
+
   end
 
 end

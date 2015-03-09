@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file adheres to [Keep a changelog](http://keepachangelog.com/).
 
+## [1.1.4] - 2015-03-08 (maintenance)
+### Changed
+- Moved functionality from constructors to methods
+- Build hash from `select_rows` instead of AR objects (performance, simplicity)
+- Driver of functionality now in method_missing (decoupling)
+
 ## [1.1.3] - 2015-03-02
 ### Fixed
 - Fix Postgres queries due to AR injecting order clause
