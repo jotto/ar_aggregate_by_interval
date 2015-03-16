@@ -1,4 +1,5 @@
-# ArAggregateByInterval (Time series)
+# ArAggregateByInterval
+## ActiveRecord time series
 ---
 
 [![Circle CI](https://circleci.com/gh/jotto/ar_aggregate_by_interval.svg?style=svg)](https://circleci.com/gh/jotto/ar_aggregate_by_interval)
