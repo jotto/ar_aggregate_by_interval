@@ -48,7 +48,7 @@ module ArAggregateByInterval
     end
 
     def ruby_strftime_map
-      @ruby_strftime_map ||= {
+      {
         'monthly' => '%Y-%m',
         # sqlite doesn't support ISO weeks
         'weekly' => Utils.db_vendor.match(/sqlite/i) ? '%Y-%U' : '%G-%V',
@@ -82,9 +82,8 @@ module ArAggregateByInterval
     end
 
     def db_vendor
-      @db_vendor ||=
-        ActiveRecord::Base.connection_config.try(:symbolize_keys).try(:[], :adapter) ||
-        ENV['DATABASE_URL']
+      ActiveRecord::Base.connection_config.try(:symbolize_keys).try(:[], :adapter) ||
+      ENV['DATABASE_URL']
     end
 
     # converts args like: [weekly, beginning] to beginning_of_week

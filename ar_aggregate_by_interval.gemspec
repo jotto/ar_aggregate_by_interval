@@ -19,9 +19,11 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'bundler', '~> 1.5'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'database_cleaner', '~> 1.4'
   s.add_development_dependency 'guard-rspec', '~> 4.5'
+  s.add_development_dependency 'mysql2'
+  s.add_development_dependency 'pg'
   s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'rails', '~> 4.2' # for database tasks
   s.add_dependency 'activesupport', '~> 4.0'
   s.add_dependency 'activerecord', '~> 4.0'
   s.add_dependency 'classy_hash', '~> 0.1'
