@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file adheres to [Keep a changelog](http://keepachangelog.com/).
 
+## [1.1.7] - 2015-03-15 (maintenance)
+### Added
+- Tests for from and to parameters
+
+## [1.1.6] - 2015-03-15 (maintenance)
+### Added
+- Tests run on MySQL, Postgres and SQLite
+
+### Changed
+- Remove memoization from Utils
+
 ## [1.1.5] - 2015-03-08 (maintenance)
 ### Changed
 - Raise ArgumentError instead of NoMethodError or RuntimeError on bad args
