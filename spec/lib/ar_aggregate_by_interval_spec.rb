@@ -16,6 +16,11 @@ describe ArAggregateByInterval do
       @to = @from
       blog1 = Blog.create! arbitrary_number: 10, created_at: @from
       blog2 = Blog.create! arbitrary_number: 20, created_at: @from
+
+      # extra row that should not be included in any of the calculations
+      # verifying that the from and to parameters are working
+      blog3 = Blog.create! arbitrary_number: 20, created_at: (@from + 2.week)
+
       blog1.page_views.create! date: @from
       blog1.page_views.create! date: @from
     end
@@ -106,6 +111,25 @@ describe ArAggregateByInterval do
     end
 
     context 'normal args' do
+
+      context 'with to' do
+        subject do
+          Blog.count_weekly(:created_at, @from, @from)
+        end
+        it "returns only 1 results on #{db_config}" do
+          expect(subject.values.size).to eq 1
+        end
+      end
+
+      context 'without to, defaults to Time.now' do
+        subject do
+          Blog.count_weekly(:created_at, @from)
+        end
+        it "returns more than 1 result on #{db_config}" do
+          expect(subject.values.size).to be > 1
+        end
+      end
+
       context 'for count' do
         subject do
           Blog.count_weekly(:created_at, @from, @from)
