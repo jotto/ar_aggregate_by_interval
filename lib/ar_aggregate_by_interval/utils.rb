@@ -40,13 +40,6 @@ module ArAggregateByInterval
       }.delete_if { |k, v| v.nil? }
     end
 
-    def ar_to_hash(ar_result, mapping)
-      ar_result.to_a.inject({}) do |memo, ar_obj|
-        mapping.each { |key, val| memo.merge!(ar_obj.send(key).to_s => ar_obj.send(val)) }
-        memo
-      end
-    end
-
     def ruby_strftime_map
       {
         'monthly' => '%Y-%m',
