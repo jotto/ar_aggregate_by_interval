@@ -27,14 +27,21 @@ Blog.avg_weekly(:created_at, :pageviews, 1.month.ago).values
 
 ## Usage
 ```ruby
-# be explicit and pass a hash
-# [:group_by_column, :from, :to, :aggregate_column]
-
-# or just pass arguments
-# count: arg_hash can be arguments: (group_by_col, from, to)
-# sum and avg: arg_hash can be arguments: (group_by_col, aggregate_col, from, to)
-Blog.{count,sum,avg}_{daily,weekly,monthly}(arg_hash).{values,values_and_dates}
+Blog.{count,sum,avg}_{daily,weekly,monthly}(hash_or_arg_list).{values,values_and_dates}`
 ```
+
+### 1. "method_missing" methods on ActiveRecord
+* `{count,sum,avg}_{daily,weekly,monthly}`
+
+### 2. pass hash or argument list
+
+* pass a Hash
+  * `{:group_by_column, :from, :to, :aggregate_column, :normalize_dates}`
+* or pass arguments
+  * when using count: `[group_by_col, from, to, options_hash]`
+  * when using sum or avg: `[group_by_col, aggregate_col, from, to, options_hash]`
+
+### 3. methods you can call: `#values` or `#values_and_dates`
 
 ```ruby
 #values //(returns an array of numerics)
@@ -73,3 +80,6 @@ Billing.sum_weekly({
   to: Time.zone.now
 }).values_and_dates
 ```
+
+## Options
+* `normalize_dates` defaults to `True` which means the `from` argument is converted to beginning_of_{day,week,month} and the `to` argument is converted to end_of_{day,week,month}

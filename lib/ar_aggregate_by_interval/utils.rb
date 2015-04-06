@@ -11,19 +11,18 @@ module ArAggregateByInterval
 
     # support legacy arguments (as opposed to direct hash)
     # can do:
-    # ArModel.count_weekly(:group_by_col, :from, :to, :return_dates_bool)
-    # ArModel.count_weekly(:from, :to, :return_dates_bool) # defaults to :created_at
+    # ArModel.count_weekly(:group_by_col, :from, :to, :options_hash)
+    # ArModel.count_weekly(:from, :to, :options_hash) # defaults to :created_at
     # or
-    # ArModel.sum_weekly(:group_by_col, :aggregate_col, :from, :to, :return_dates_bool)
+    # ArModel.sum_weekly(:group_by_col, :aggregate_col, :from, :to, :options_hash)
     def args_to_hash(sum_or_count, daily_weekly_monthly, *args)
-      group_by_column, aggregate_column, from, to, return_dates = args
+      group_by_column, aggregate_column, from, to, options_hash = args
 
       group_by_column ||= 'created_at'
-      return_dates ||= false
 
       if sum_or_count == 'count'
         if aggregate_column.present? && (aggregate_column.is_a?(Date) || aggregate_column.is_a?(Time))
-          return_dates = to
+          options_hash = to
           to = from
           from = aggregate_column
           aggregate_column = nil
@@ -32,12 +31,16 @@ module ArAggregateByInterval
         raise ArgumentError, "aggregate_column cant be nil with #{sum_or_count}"
       end
 
-      return {
+      if !options_hash.nil? && !options_hash.is_a?(Hash)
+        raise ArgumentError, 'last argument must be options hash'
+      end
+
+      return (options_hash || {}).merge({
         group_by_column: group_by_column.try(:intern),
         from: from,
         to: to,
         aggregate_column: aggregate_column.try(:intern)
-      }.delete_if { |k, v| v.nil? }
+      }).delete_if { |k, v| v.nil? }
     end
 
     def ruby_strftime_map

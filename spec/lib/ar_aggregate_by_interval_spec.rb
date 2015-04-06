@@ -15,7 +15,7 @@ describe ArAggregateByInterval do
       @from = DateTime.parse '2013-08-05'
       @to = @from
       blog1 = Blog.create! arbitrary_number: 10, created_at: @from
-      blog2 = Blog.create! arbitrary_number: 20, created_at: @from
+      blog2 = Blog.create! arbitrary_number: 20, created_at: @from + 1.day
 
       # extra row that should not be included in any of the calculations
       # verifying that the from and to parameters are working
@@ -60,6 +60,21 @@ describe ArAggregateByInterval do
     end
 
     context 'hash args' do
+
+      context 'with normalize dates disabled' do
+        subject do
+          Blog.count_weekly({
+            group_by_column: :created_at,
+            from: @from,
+            to: @to,
+            normalize_dates: false
+          })
+        end
+
+        it "does not change dates on #{db_config}" do
+          expect(subject.values_and_dates).to eq([date: @from.to_date, value: 1])
+        end
+      end
 
       context 'for count' do
         subject do
@@ -111,6 +126,18 @@ describe ArAggregateByInterval do
     end
 
     context 'normal args' do
+
+      context 'with normalize dates disabled' do
+        subject do
+          Blog.count_weekly(:created_at, @from, @from, {
+            normalize_dates: false
+          })
+        end
+
+        it "does not change dates on #{db_config}" do
+          expect(subject.values_and_dates).to eq([date: @from.to_date, value: 1])
+        end
+      end
 
       context 'with to' do
         subject do

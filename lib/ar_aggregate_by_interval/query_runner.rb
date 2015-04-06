@@ -16,7 +16,9 @@ module ArAggregateByInterval
       from: [Date, DateTime, Time, ActiveSupport::TimeWithZone],
       to: [:optional, Date, DateTime, Time, ActiveSupport::TimeWithZone],
 
-      aggregate_column: [:optional, Symbol, NilClass] # required when using sum (as opposed to count)
+      aggregate_column: [:optional, Symbol, NilClass], # required when using sum (as opposed to count)
+
+      normalize_dates: [:optional, TrueClass, FalseClass]
     }
 
     attr_reader :values, :values_and_dates, :from, :to, :interval
@@ -27,8 +29,15 @@ module ArAggregateByInterval
 
       @ar_model = ar_model
 
-      @from = normalize_from(hash_args[:from], hash_args[:interval])
-      @to = normalize_to(hash_args[:to] || Time.zone.try(:now) || Time.now, hash_args[:interval])
+      @from = hash_args[:from]
+      @to = hash_args[:to] || Time.zone.try(:now) || Time.now
+
+      # by default, change dates to beginning and end of interval
+      # e.g. beginning and end of {day,week,month}
+      if hash_args[:normalize_dates] != false
+        @from = normalize_from(@from, hash_args[:interval])
+        @to = normalize_to(@to, hash_args[:interval])
+      end
 
       @db_vendor_select =
         Utils.select_for_grouping_column(hash_args[:group_by_column])[hash_args[:interval]]

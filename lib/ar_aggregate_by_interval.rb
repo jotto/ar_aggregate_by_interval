@@ -17,7 +17,7 @@ module ArAggregateByInterval
 
     hash_args = if args.size == 1 && args.first.is_a?(Hash)
       args.first
-    elsif args.size > 1 && !args.any?{ |a| a.is_a?(Hash) }
+    elsif args.size > 1 && !args[0..-2].any?{ |a| a.is_a?(Hash) }
       Utils.args_to_hash(aggregate_function, interval, *args)
     else
       nil
