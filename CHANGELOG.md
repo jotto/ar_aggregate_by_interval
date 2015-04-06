@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file adheres to [Keep a changelog](http://keepachangelog.com/).
 
+## [1.2.0] - 2015-04-05
+### Added
+- normalize_dates option
+
 ## [1.1.7] - 2015-03-15 (maintenance)
 ### Added
 - Tests for from and to parameters
