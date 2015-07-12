@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This file adheres to [Keep a changelog](http://keepachangelog.com/).
 
+## [1.2.1] - 2015-07-12
+### Fixed
+- running tests with ActiveRecord 4.2 across multiple databases
+
 ## [1.2.0] - 2015-04-05
 ### Added
 - normalize_dates option

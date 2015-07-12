@@ -11,6 +11,9 @@ describe ArAggregateByInterval do
     before(:all) do |example|
       # connect to DB specified by db_config (a symbol matching database.yml keys)
       ActiveRecord::Base.establish_connection db_config
+      ActiveRecord::Base.descendants.each do |_model|
+        _model.reset_column_information
+      end
 
       @from = DateTime.parse '2013-08-05'
       @to = @from
