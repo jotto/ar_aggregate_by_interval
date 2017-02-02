@@ -1,12 +1,12 @@
 mysql:
   adapter: mysql2
   encoding: utf8
-  database: 'ar_aggregate_by_interval_test'
+  # database: 'ar_aggregate_by_interval_test'
   pool: 1
 postgresql:
   adapter: postgresql
   encoding: utf8
-  database: 'ar_aggregate_by_interval_test'
+  # database: 'ar_aggregate_by_interval_test'
   pool: 1
 sqlite3:
   adapter: sqlite3
